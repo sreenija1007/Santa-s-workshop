@@ -1,0 +1,561 @@
+:root {
+    --primary-color: #d42426; /* Santa Red */
+    --secondary-color: #165b33; /* Elf Green */
+    --bg-color: #f0f0f0;
+    --panel-bg: #ffffff;
+    --text-color: #333;
+    --accent-gold: #f8b229;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: var(--bg-color);
+    margin: 0;
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* HEADER */
+.game-header {
+    background: var(--primary-color);
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.brand { font-size: 1.5rem; font-weight: bold; }
+.magic-dust { color: var(--accent-gold); font-weight: bold; }
+
+/* LAYOUT */
+.main-container {
+    display: flex;
+    flex: 1;
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.side-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.game-area {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* PANELS */
+.panel-box {
+    background: var(--panel-bg);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-top: 5px solid var(--secondary-color);
+}
+
+/* THE GRID */
+.grid-container {
+    display: grid; 
+    width: 350px;  
+    height: 350px;
+    gap: 8px;      
+    
+    background: #333;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 20px auto; /* Centers the grid in the middle of page */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    
+    /* Default layout (JS will override this, but safe to have) */
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+}
+
+.tile {
+    /* Use a relative size but ensure it has substance */
+    width: 100%; 
+    height: 100%;
+    min-width: 30px; 
+    min-height: 30px; 
+    
+    aspect-ratio: 1;
+    background: var(--primary-color);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    user-select: none;
+    transition: transform 0.2s ease, background 0.2s;
+    text-shadow: 0 0 3px #000, 0 0 5px #000;
+    font-size: 1.2rem;
+    background-size: calc(100% * var(--grid-size));
+    background-color: var(--primary-color); 
+    background-repeat: no-repeat;
+}
+
+body.theme-santa .tile {
+    background-image: url('../assets/santa.jpeg'); /* Santa/Reindeer */
+}
+
+body.theme-frozen .tile {
+    background-image: url('../assets/frozen.jpeg'); /* Snow/Ice */
+}
+
+body.theme-midnight .tile {
+    background-image: url('../assets/house.jpeg'); /* Night Sky */
+}
+
+.tile.empty {
+    background-image: none !important;
+    background-color: rgba(0,0,0,0.1);
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+}
+
+.hide-numbers .tile {
+    color: transparent;
+    text-shadow: none;
+}
+
+.tile:hover {
+    filter: brightness(1.1);
+}
+
+/* CONTROLS */
+.btn-primary {
+    background: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.power-up-btn {
+    display: block;
+    width: 100%;
+    margin-bottom: 5px;
+    padding: 8px;
+    background: #eee;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.power-up-btn:hover { background: #ddd; }
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .side-panel {
+        order: 2; /* Move panels below grid on mobile */
+    }
+
+    .game-area {
+        order: 1;
+    }
+
+    .grid-container {
+        /* Make tiles smaller on phone */
+        grid-template-columns: repeat(4, 70px);
+        grid-template-rows: repeat(4, 70px);
+        gap: 5px;
+    }
+
+    .tile {
+        width: 70px;
+        height: 70px;
+        font-size: 1.5rem;
+    }
+}
+/* AUTH BUTTONS */
+.btn-group {
+    display: flex;
+    gap: 15px; /* Add space between buttons */
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* Primary Action (Log In) - already exists as btn-primary, just ensuring specific hover */
+.btn-primary:hover {
+    background-color: #b31b1d; /* Darker Red */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Secondary Action (Register) */
+.btn-secondary {
+    background-color: var(--secondary-color); /* Elf Green */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #0f4224; /* Darker Green */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Add to bottom of style.css */
+.logout-link {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-left: 10px;
+}
+
+.logout-link:hover {
+    color: white;
+}
+
+/* AUDIO BOX STYLES */
+.audio-box {
+    border-top: 5px solid #d4af37; /* Gold Border */
+    background: #1a1a1a; /* Dark background for contrast */
+    color: white;
+    text-align: center;
+}
+
+.visualizer-container {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    height: 40px;
+    margin-bottom: 10px;
+    align-items: flex-end;
+}
+
+.bar {
+    width: 8px;
+    background-color: #d42426; /* Santa Red */
+    height: 10%;
+    border-radius: 2px 2px 0 0;
+    transition: height 0.1s ease;
+}
+
+/* Animate bars when music is playing */
+.playing .bar {
+    animation: bounce 0.5s infinite ease-in-out alternate;
+}
+
+.playing .bar:nth-child(1) { animation-delay: 0.1s; background: #d42426; }
+.playing .bar:nth-child(2) { animation-delay: 0.3s; background: #165b33; }
+.playing .bar:nth-child(3) { animation-delay: 0.5s; background: #d4af37; }
+.playing .bar:nth-child(4) { animation-delay: 0.2s; background: #165b33; }
+.playing .bar:nth-child(5) { animation-delay: 0.4s; background: #d42426; }
+
+@keyframes bounce {
+    0% { height: 10%; }
+    100% { height: 90%; }
+}
+
+.track-info {
+    background: #333;
+    padding: 5px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    border: 1px solid #555;
+    font-family: 'Courier New', monospace;
+    color: #0f0; /* Retro Matrix Green text */
+}
+
+.audio-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.btn-audio {
+    background: #444;
+    border: 1px solid #666;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.btn-audio:hover {
+    background: #d4af37;
+    border-color: #fff;
+    transform: scale(1.1);
+}
+
+.volume-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
+    justify-content: center;
+}
+
+input[type=range] {
+    accent-color: #d42426;
+}
+
+.controls {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: center; /* Centers items */
+    margin-bottom: 20px;
+    background: #fff;
+    padding: 10px 20px;
+    border-radius: 50px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    width: fit-content; /* Prevents it from being too wide */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* STYLE THE DROPDOWN */
+#difficulty-select {
+    padding: 10px 15px;
+    font-size: 1rem;
+    border: 2px solid #165b33;
+    border-radius: 25px;
+    background-color: #f8f8f8;
+    color: #333;
+    cursor: pointer;
+    font-weight: bold;
+    outline: none;
+    height: 45px; /* Fixed height */
+}
+
+/* STYLE THE BUTTON */
+#start-btn {
+    padding: 0 25px; /* Side padding */
+    height: 45px;    /* Match dropdown height */
+    border-radius: 25px;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#difficulty-select:hover {
+    border-color: #d42426;     /* Turns Santa Red on hover */
+    background-color: #fff;
+}
+
+/* BASE VARIABLES (Shared) */
+:root {
+    --panel-bg: #ffffff;
+    --text-color: #333;
+    --accent-gold: #f8b229;
+}
+
+/* 🎅 THEME 1: CLASSIC SANTA (Default) */
+body.theme-santa {
+    --primary-color: #d42426;  /* Red */
+    --secondary-color: #165b33; /* Green */
+    --bg-color: #f0f0f0;        /* Light Grey */
+    --highlight: #d4af37;       /* Gold */
+}
+
+/* ❄️ THEME 2: FROZEN TUNDRA */
+body.theme-frozen {
+    --primary-color: #2b9db9;   /* Ice Blue */
+    --secondary-color: #1c4b82; /* Deep Blue */
+    --bg-color: #e3f4f7;        /* Snowy White */
+    --highlight: #a8e6cf;       /* Mint */
+}
+/* Frozen specific overrides */
+body.theme-frozen .game-header { background: linear-gradient(90deg, var(--secondary-color), var(--primary-color)); }
+
+
+/* 🌙 THEME 3: MIDNIGHT SLEIGH */
+body.theme-midnight {
+    --primary-color: #4b0082;   /* Indigo */
+    --secondary-color: #191970; /* Midnight Blue */
+    --bg-color: #1a1a2e;        /* Dark Navy */
+    --panel-bg: #16213e;        /* Dark Panel */
+    --text-color: #e0e0e0;      /* Light Text */
+    --highlight: #ffd700;       /* Bright Gold */
+}
+
+/* 🔥 DYNAMIC STATE: PANIC MODE (Applied via JS when time is low) */
+body.state-panic {
+    animation: panicPulse 1s infinite;
+}
+@keyframes panicPulse {
+    0% { box-shadow: inset 0 0 0px red; }
+    50% { box-shadow: inset 0 0 50px rgba(255, 0, 0, 0.2); }
+    100% { box-shadow: inset 0 0 0px red; }
+}
+
+/* --- ACHIEVEMENT GALLERY --- */
+#gift-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 per row */
+    gap: 10px;
+    padding: 10px 0;
+}
+
+.achievement-card {
+    background: rgba(0,0,0,0.05);
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    position: relative;
+    cursor: help;
+    transition: transform 0.2s;
+}
+
+.achievement-card:hover {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.achievement-icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* LOCKED STATE */
+.achievement-card.locked {
+    opacity: 0.5;
+}
+.achievement-card.locked .achievement-icon {
+    filter: grayscale(100%);
+}
+
+/* TOOLTIP (Simple Pure CSS) */
+.achievement-card::after {
+    content: attr(data-desc); /* Grabs text from HTML attribute */
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: white;
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    z-index: 10;
+}
+
+.achievement-card:hover::after {
+    opacity: 1;
+}
+
+/* --- UNLOCK POPUP (TOAST) --- */
+#toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.toast {
+    background: var(--bg-color); /* Matches theme */
+    border-left: 5px solid var(--accent-gold);
+    color: var(--text-color);
+    padding: 15px 25px;
+    margin-top: 10px;
+    border-radius: 4px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    animation: slideIn 0.5s ease-out, fadeOut 0.5s ease-in 4.5s forwards;
+    width: 300px;
+}
+
+@keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+@keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+
+/* Power-up Button Styles */
+.power-up-btn {
+    background: linear-gradient(to bottom, #ffffff, #f0f0f0);
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #444;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.power-up-btn:hover {
+    background: white;
+    transform: translateX(5px); /* Slide slightly right */
+    border-color: var(--accent-gold);
+    color: var(--primary-color);
+}
+
+.power-up-btn:active {
+    transform: scale(0.98);
+}
+
+/* Hint Glow Animation */
+.hint-glow {
+    background-color: var(--accent-gold) !important;
+    color: #000 !important;
+    box-shadow: 0 0 15px var(--accent-gold);
+    transform: scale(1.05);
+    z-index: 10;
+    animation: pulseHint 0.5s infinite alternate;
+}
+
+@keyframes pulseHint {
+    from { box-shadow: 0 0 10px var(--accent-gold); }
+    to { box-shadow: 0 0 25px var(--accent-gold); }
+}
+
+/* Add to bottom of css/style.css */
+.tile.movable {
+    border: 3px solid #ffd700 !important; /* Gold Border */
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.6); /* Gold Glow */
+    transform: scale(0.98); /* Slight inset look */
+    z-index: 5;
+}
+
+.tile.movable:hover {
+    background-color: #d4af37; /* Darker Gold on hover */
+    cursor: pointer;
+}
+/* Add to bottom of css/style.css */
+.grid-container.golden-preview .tile {
+    background-color: #ffd700 !important; /* Bright Gold Background */
+    color: #000 !important; /* Black Numbers */
+    border: 2px solid white !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+

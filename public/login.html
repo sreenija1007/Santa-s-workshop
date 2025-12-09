@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access - Santa's Workshop</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .auth-container { 
+            max-width: 380px; 
+            margin: 80px auto; 
+            text-align: center; 
+            padding: 40px;
+            border-top: 5px solid var(--primary-color);
+        }
+        input { 
+            display: block; 
+            width: 100%; 
+            margin: 15px 0; 
+            padding: 12px; 
+            border: 2px solid #ddd; 
+            border-radius: 5px; 
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        input:focus { outline: none; border-color: var(--primary-color); }
+        
+        .toggle-link {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .toggle-link:hover { color: var(--primary-color); }
+
+        /* Hide Confirm Password by default */
+        #confirm-box { display: none; }
+        
+        .fade-in { animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body class="theme-santa">
+    <div class="main-container">
+        <div class="panel-box auth-container">
+            <h1 id="form-title">🎅 Elf Login</h1>
+            <p id="form-desc">Enter your credentials to work.</p>
+            
+            <div id="error-msg" style="color: #d42426; font-weight: bold; min-height: 20px;"></div>
+            
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            
+            <div id="confirm-box" class="fade-in">
+                <input type="password" id="confirm-pass" placeholder="Confirm Password">
+            </div>
+            
+            <button id="submit-btn" class="btn-primary" style="width: 100%; margin-top: 10px;" onclick="handleSubmit()">
+                Log In
+            </button>
+
+            <div class="toggle-link" onclick="toggleMode()">
+                New to the Workshop? <span id="toggle-text">Register here</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isRegistering = false;
+
+        function toggleMode() {
+            isRegistering = !isRegistering;
+            const title = document.getElementById('form-title');
+            const desc = document.getElementById('form-desc');
+            const btn = document.getElementById('submit-btn');
+            const toggleText = document.getElementById('toggle-text');
+            const confirmBox = document.getElementById('confirm-box');
+            const container = document.querySelector('.auth-container');
+
+            // Clear errors
+            document.getElementById('error-msg').innerText = "";
+
+            if (isRegistering) {
+                // SWITCH TO REGISTER MODE
+                title.innerText = "✨ New Elf Registration";
+                desc.innerText = "Join the workshop team today!";
+                btn.innerText = "Create Account";
+                btn.style.backgroundColor = "#165b33"; // Green
+                toggleText.innerText = "Back to Login";
+                confirmBox.style.display = "block";
+                container.style.borderTopColor = "#165b33"; // Green Border
+            } else {
+                // SWITCH TO LOGIN MODE
+                title.innerText = "🎅 Elf Login";
+                desc.innerText = "Enter your credentials to work.";
+                btn.innerText = "Log In";
+                btn.style.backgroundColor = "#d42426"; // Red
+                toggleText.innerText = "Register here";
+                confirmBox.style.display = "none";
+                container.style.borderTopColor = "#d42426"; // Red Border
+            }
+        }
+
+        async function handleSubmit() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const confirm = document.getElementById('confirm-pass').value;
+            const errorEl = document.getElementById('error-msg');
+
+            if (!user || !pass) {
+                errorEl.innerText = "Please fill in all fields.";
+                return;
+            }
+
+            // Client-side Validation for Registration
+            if (isRegistering && pass !== confirm) {
+                errorEl.innerText = "Passwords do not match!";
+                return;
+            }
+
+            const action = isRegistering ? 'register' : 'login';
+
+            try {
+                const res = await fetch(`/api/auth/${action}`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ username: user, password: pass })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    if (isRegistering) {
+                        alert("Registration Successful! Please Log In.");
+                        toggleMode(); // Switch back to login screen
+                    } else {
+                        // LOGIN SUCCESS
+                        localStorage.setItem('userId', data.userId);
+                        localStorage.setItem('username', data.username);
+                        window.location.href = 'index.html';
+                    }
+                } else {
+                    errorEl.innerText = data.error || "Authentication failed";
+                }
+            } catch (err) {
+                alert("SYSTEM ERROR: " + err.message);
+                
+                // This puts it on the page text
+                errorEl.innerText = "Error Details: " + err.message;
+            }
+        }
+    </script>
+</body>
+</html>
