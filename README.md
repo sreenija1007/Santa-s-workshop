@@ -103,7 +103,7 @@ node server.js
 Open:
 
 http://localhost:3000
-
+```
 🤖 AI Assistance Disclosure
 
 This project was developed with the responsible use of AI tools.
