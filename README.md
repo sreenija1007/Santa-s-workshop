@@ -103,3 +103,17 @@ node server.js
 Open:
 
 http://localhost:3000
+
+🤖 AI Assistance Disclosure
+
+This project was developed with the responsible use of AI tools.
+
+Assistance included:
+
+Generating boilerplate code templates for Express setup.
+
+Debugging support for frontend-backend logic issues.
+
+Documentation formatting assistance.
+
+All AI-generated content was reviewed, modified, tested, and integrated manually to satisfy project constraints including SQL CLI-only usage and custom algorithm requirements.
